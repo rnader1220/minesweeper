@@ -35,3 +35,20 @@ You do not need to fully complete the challenge. We suggest not to spend more th
 What we want to see is how well you handle yourself given the time you spend on the problem, how you think, and how you prioritize when time is insufficient to solve everything.
 
 Please email your solution as soon as you have completed the challenge or the time is up.
+
+## Planning notes
+
+* Review parameters of projects.  Make sure that I understand exactly the size/shape of box in which I can work.  TIME CONSTRAINTS MATTER.
+* Review definitions.  Make sure that you are back on textbook with definitions (IE: RESTful API -- just because you think your defaults are restful, doesn't mean they'll meet other people's definition)
+* Set up environment needed to build/test/etc, Choose tools to use within above constraints.
+* Triage.  Determine, given constraints, which requirements are going to be met/ignored, high/low, and precedence. 
+    1: Decide up front to implement persistance and users (YES, BTW) because they are top of precedence.  Refitting for this later kills time.
+    2: Decide up front that game parameters are prolly not going to make it to the final cut.  reduces time, but can be retrofitted easily if time permits.
+    3: Have a design in mind for the whole thing before starting to code anything.  (You got to know where your going before you step out the door, or you're lost)
+* Decide your implementation. 
+    1: JS frontend, PHP backend. 
+    2: MySQL is somewhat inelegant for this application, but helps with the time constraint.  I think I'd rather find a lighter solution (text files?)
+* Write these notes.  A roadmap for myself, and progress report for the client (YOU).
+* Execute first commit with these notes, to start the timer (did I do that already by creating the repo?  LOL)
+* GO.  Document API calls as they are built (/help)
+
