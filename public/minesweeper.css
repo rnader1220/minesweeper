@@ -60,3 +60,20 @@ html, body {
 .m-b-md {
     margin-bottom: 30px;
 }
+
+#game {
+    text-align: center;
+}
+#game table {
+    text-align: center;
+}
+
+#game table tbody tr {
+    height:30px;
+}
+
+#game table  tbody tr td {
+    width:30px;
+    border: solid 1px gray;
+    background-color: silver;
+}

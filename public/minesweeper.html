@@ -111,12 +111,24 @@
 			</div>
 			
 		</div>
-		<div id='gamelist' class="content">
-			<table>
-			</table>
+		<div id='start' class="content">
+			<form>
+
+			<ul>
+				<li><input id='size', name='size' type='radio', value = 10> Small Game (8x8, 10 mines)</li>
+				<li><input id='size', name='size' type='radio', value = 40> Medium Game (16x16, 40 mines)</li>
+				<li><input id='size', name='size' type='radio', value = 99> Large Game (30x16, 99 mines)</li>
+
+			</ul>
+			<button type="submit">
+				Lets Go
+			</button>
+
 		</div>
-		<div id='gameplay' class="content">
-			<table>
+		<div id='list' class="content">
+		</div>
+		<div id='game' class="content">
+			<table  id='game_table' style='border:1px; align:center' cellspacing=3 cellborder=1>
 			</table>
 		</div>
 
