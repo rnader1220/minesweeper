@@ -2,75 +2,65 @@ var minesweeper = (function($, undefined) {
 
 	var session_id = null;
 
-	var initialize = function() {
+	var initialize = function() {		
+		$('.content').hide();
 		session_id = null;
 		setSessionState();
 	}
 
 	var register = function() {
-		$('#login').hide();
-		$.ajax({
-			url: '/register',
-			cache: false,
-		})
-		.done(function(html) {
-			$('#login').html(html).fadeIn(300);
-			$('#login form').on('submit', function (e) {
-				e.preventDefault();
-				if ($(this).valid()) $.ajax({
-					type: "POST",
-					url: '/register',
-					data: $(this).serialize(),
-				})
-					.done(function (resp) {
+		$('.content').hide();
+		$('#register').fadeIn(300);
+		$('#register form').off('submit')
+		.on('submit', function (e) {
+			e.preventDefault();
+			if ($(this).valid()) $.ajax({
+				type: "POST",
+				url: '/api/v1/register',
+				data: $(this).serialize(),
+			})
+				.done(function (resp) {
 
-						$('#login').fadeOut(300);
-						session_id = resp;
-						setTimeout(function () {
-							setSessionState();
-						}, 300);
-					})
-					.fail(function (message) {
-						alert(message);
-					});
-			}).validate();
-		});
+					$('#login').fadeOut(300);
+					session_id = resp;
+					setTimeout(function () {
+						setSessionState();
+					}, 300);
+				})
+				.fail(function (message) {
+					alert(JSON.stringify(message));
+				});
+		}).validate();
 	};
 
 	var login = function() {
-		$('#login').hide();
+		$('.content').hide();
+		$('#login').fadeIn(300);
+		$('#login form').off('submit')
+			.on('submit', function (e) {
+			e.preventDefault();
+			if ($(this).valid()) $.ajax({
+				type: "POST",
+				url: '/api/v1/login',
+				data: $(this).serialize(),
+			})
+				.done(function (resp) {
+					$('#login').fadeOut(300);
+					session_id = resp.session_id;
+					setTimeout(function () {
+						setSessionState();
+					}, 300);
 
-		$.ajax({
-			url: '/login',
-			cache: false,
-		})
-		.done(function(html) {
-			$('#login').html(html).fadeIn(300);
-
-			$('#login form').on('submit', function (e) {
-				e.preventDefault();
-				if ($(this).valid()) $.ajax({
-					type: "POST",
-					url: '/login',
-					data: $(this).serialize(),
 				})
-					.done(function (resp) {
-						$('#login').fadeOut(300);
-						session_id = resp.session_id;
-						setTimeout(function () {
-							setSessionState();
-						}, 300);
-
-					})
-					.fail(function (message) {
-						alert(message);
-					});
-			}).validate();
-		});
+				.fail(function (message) {
+					alert(JSON.stringify(message));
+				});
+		}).validate();
 	};
 
 	var setSessionState = function() {
 		// hide all menu items
+		$('.content').hide();
 		$('[id^=menu-]').hide().off('click');
 		if(session_id == null) {
 			$('#menu-login').on('click', login).show();
