@@ -36,6 +36,9 @@ html, body {
 }
 
 .title {
+    
+    color: #000020;
+    font-family: 'Permanent Marker', sans-serif;
     font-size: 84px;
 }
 

@@ -5,29 +5,51 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<title>Richard's Minesweeper</title>
-
+		<link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet"> 
 		<script
 			  src="https://code.jquery.com/jquery-3.4.1.min.js"
 			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			  crossorigin="anonymous"></script>
 			  <script type="text/javascript" src="minesweeper.js"></script>
+
+			  <script
+			  src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 		<link rel="stylesheet" type="text/css" href="minesweeper.css">
 
 	</head>
 	<body>
-		<div id = 'menu' class="menu-main">
+		<div class="menu-main">
 			<a id='menu-login'>Login</a>
 			<a id='menu-register'>Register</a>
 			<a id='menu-start'>New Game</a>
-			<a id='menu-resume'>Resume Game</a>
 			<a id='menu-history'>History</a>
 			<a id='menu-logout'>Good Bye!</a>
 		</div>
  
 		<div id='content' class="content">
 			<div class="title m-b-md">
-			Minesweeper
+			Death From Below!
 			</div>
 		</div>
+		<div id='login' class="content">
+		</div>
+
+		<div id='gamelist' class="content">
+			<table>
+			</table>
+		</div>
+		<div id='gameplay' class="content">
+			<table>
+			</table>
+		</div>
+
 	</body>
 </html>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		minesweeper.initialize();
+	});
+	</script>
+	
