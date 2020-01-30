@@ -20,8 +20,8 @@ class CreateGamesTable extends Migration
             $table->integer('cols')->default(10);
             $table->integer('mines')->default(40);
             $table->integer('status')->default(0);
-            $table->text('minemap')->default('');
-            $table->text('clickmap')->default('');
+            $table->text('minemap');
+            $table->text('clickmap');
             $table->timestamps();
         });
     }

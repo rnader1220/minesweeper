@@ -23,6 +23,8 @@ Route::prefix('v1')->group(function(){
         Route::get('list', 'Api\GameController@list');
         Route::post('new', 'Api\GameController@new');
         Route::post('start', 'Api\GameController@start');
+        Route::post('pick', 'Api\GameController@pick');
+
         // pick
         // flag
 

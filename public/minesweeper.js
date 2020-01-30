@@ -1,6 +1,7 @@
 var minesweeper = (function($, undefined) {
 
 	var user_token = null;
+	var curr_game = null;
 
 	var initialize = function() {		
 		$('.content').hide();
@@ -102,7 +103,7 @@ var minesweeper = (function($, undefined) {
 	var select = function(game_id) {
 		$.ajax({
 			type: "GET",
-			url: '/api/v1/play?id='+gameid,
+			url: '/api/v1/play?id='+game_id,
 			headers: {
 				Accept: 'application/json',
 				Authorization: 'Bearer '+user_token,
@@ -120,8 +121,6 @@ var minesweeper = (function($, undefined) {
 	}
 
 	var start = function() {
-//		renderBoard({rows: 10, cols: 10});
-		
 		$('.content').hide();
 		$('#start').fadeIn(300);
 		$('#start form').off('submit')
@@ -156,6 +155,7 @@ var minesweeper = (function($, undefined) {
 		$('#game_table').find('tbody').off('click', 'td');
 		$('#game_table').find('tbody').off('contextmenu', 'td');
 		// clear table
+		curr_game = gameMap.id;
 		var tbl = document.getElementById("game_table");
 		tbl.innerHTML = "";
 		// do board layout
@@ -174,6 +174,7 @@ var minesweeper = (function($, undefined) {
 	}
 
 	var renderGame = function(gameMap) {
+
 		// include token in request
 		// gameMap is JSON
 		// rows, columns, cells
@@ -190,6 +191,29 @@ var minesweeper = (function($, undefined) {
 
 	var pick = function(cell) {
 		alert('pick ' + $(cell).attr('row') + ':' + $(cell).attr('col'));
+		var data = {
+			'row': parseInt($(cell).attr('row')),
+			'col': parseInt($(cell).attr('col')),
+			'game_id': curr_game
+		};
+
+		$.ajax({
+			type: "POST",
+			url: '/api/v1/pick',
+			data: data,
+			headers: {
+				Accept: 'application/json',
+				Authorization: 'Bearer '+user_token,
+			},
+			})
+			.done(function (resp) {
+				alert(resp);
+				renderGame(resp);
+			})
+			.fail(function (message) {
+				alert(JSON.stringify(message));
+			});
+	
 		// ajax call
 		// on success
 		// renderGame(resp);
