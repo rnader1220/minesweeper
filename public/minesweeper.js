@@ -1,10 +1,10 @@
 var minesweeper = (function($, undefined) {
 
-	var session_id = null;
+	var user_token = null;
 
 	var initialize = function() {		
 		$('.content').hide();
-		session_id = null;
+		user_token = null;
 		setSessionState();
 	}
 
@@ -21,8 +21,8 @@ var minesweeper = (function($, undefined) {
 			})
 				.done(function (resp) {
 
-					$('#login').fadeOut(300);
-					session_id = resp;
+					$('#register').fadeOut(300);
+					user_token = resp.success.token;
 					setTimeout(function () {
 						setSessionState();
 					}, 300);
@@ -46,7 +46,7 @@ var minesweeper = (function($, undefined) {
 			})
 				.done(function (resp) {
 					$('#login').fadeOut(300);
-					session_id = resp.session_id;
+					user_token = resp.success.token;
 					setTimeout(function () {
 						setSessionState();
 					}, 300);
@@ -62,7 +62,7 @@ var minesweeper = (function($, undefined) {
 		// hide all menu items
 		$('.content').hide();
 		$('[id^=menu-]').hide().off('click');
-		if(session_id == null) {
+		if(user_token == null) {
 			$('#menu-login').on('click', login).show();
 			$('#menu-register').on('click', register).show();
 			// show login
@@ -75,22 +75,27 @@ var minesweeper = (function($, undefined) {
 
 	}
 	var list = function() {
+		// include token in request
 		// load into tables grid
 	}
 
 	var select = function() {
+		// include token in request
 		// get game id value
 		// request game state
 		// renderGame(gameMap)	
 	}
 
 	var start = function() {
+		// show new game form
+		// include token in request
 		// request new game ui screen	
 		// on save ...	
 		// renderGame(gameMap)	
 	}
 
 	var renderGame = function(gameMap) {
+		// include token in request
 		// gameMap is JSON
 		// rows, columns, cells
 		// set status
@@ -98,7 +103,7 @@ var minesweeper = (function($, undefined) {
 	}
 
 	var logout = function() {
-		session_id = null;
+		user_token = null;
 		setSessionState();
 	}
 
