@@ -165,21 +165,56 @@ var minesweeper = (function($, undefined) {
 				var cell = row.insertCell();
 				$(cell).attr('row', rownum);
 				$(cell).attr('col', colnum);
+				$(cell).attr('index', rownum * gameMap.rows + colnum);
+
 			}
 		}
 		$('#game_table').find('tbody').on('click', 'td', function() {pick(this);} );
 		$('#game_table').find('tbody').on('contextmenu', 'td', function(e) {e.preventDefault();flag(this);} );
-
 		$('#game').show();
+		
 	}
 
 	var renderGame = function(gameMap) {
+		var clickmap = $.parseJSON(gameMap.clickmap);
+		for (t=0; t < clickmap.length; t++) {
+			element = clickmap[t];
+			cell = findCell(element.row * gameMap.rows + element.col);
+			$(cell).css('background-color', '#d0d0ff');
+			switch(element.value) {
+				case -3:
+					$(cell).html('&#9873;');
+				break;
+				case -1:
+					$(cell).html('&#10040;');
+				break;
+				case -2:
+					$(cell).html('&#10042;');
+				break;
+				case 0:
+					$(cell).html(' ');
+					break;
+				default:
+					$(cell).html(element.value);
+				break;
 
-		// include token in request
-		// gameMap is JSON
-		// rows, columns, cells
-		// set status
+			}
+			$(cell).addClass('disabled');
 
+		}
+		if(gameMap.status == -1) {
+			alert('game over!');
+			$('#game_table').find('tbody').off('click');
+			$('#game_table').find('tbody').off('contextmenu');
+	
+		}
+
+	}
+
+	var findCell = function(index) {
+		var cell = $("#game_table").find("[index]").eq(index);
+		$(cell).css('background-color', 'red');
+		return cell;
 	}
 
 	var flag = function(cell) {
@@ -190,7 +225,8 @@ var minesweeper = (function($, undefined) {
 	}
 
 	var pick = function(cell) {
-		alert('pick ' + $(cell).attr('row') + ':' + $(cell).attr('col'));
+		if($(cell).hasClass('disabled')) return false;
+		//if ($(cell).css('background-color') != 'silver') return false;
 		var data = {
 			'row': parseInt($(cell).attr('row')),
 			'col': parseInt($(cell).attr('col')),
@@ -207,17 +243,11 @@ var minesweeper = (function($, undefined) {
 			},
 			})
 			.done(function (resp) {
-				alert(resp);
 				renderGame(resp);
 			})
 			.fail(function (message) {
 				alert(JSON.stringify(message));
 			});
-	
-		// ajax call
-		// on success
-		// renderGame(resp);
-
 	}
 
 	var logout = function() {
