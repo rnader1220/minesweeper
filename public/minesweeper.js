@@ -95,7 +95,7 @@ var minesweeper = (function($, undefined) {
 			}
 		})
 		.fail(function (message) {
-			alert(JSON.stringify(message));
+			//alert(JSON.stringify(message));
 		});
 	}
 
@@ -161,6 +161,7 @@ var minesweeper = (function($, undefined) {
 		$('#game_table').find('tbody').on('click', 'td', function() {pick(this, true);} );
 		$('#game_table').find('tbody').on('contextmenu', 'td', function(e) {e.preventDefault();pick(this, false);} );
 		$('#game').show();
+		renderGame(gameMap);
 		
 	}
 
