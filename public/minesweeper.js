@@ -104,27 +104,12 @@ var minesweeper = (function($, undefined) {
 		$('#history table tr').on('click', select(self))
 	}
 
-	var select = function(game_id) {
-		$.ajax({
-			type: "GET",
-			url: '/api/v1/play?id='+game_id,
-			headers: {
-				Accept: 'application/json',
-				Authorization: 'Bearer '+user_token,
-			},
-		})
-		.done(function (resp) {
-			renderBoard(resp);
-			setTimeout(function () {
-				$('#game').fadeIn(300);
-			}, 300);
-		})
-		.fail(function (message) {
-			alert(JSON.stringify(message));
-		});
-	}
 
 	var start = function() {
+		if(curr_game != null)
+			alert('Clearer waters elsewhere perhaps?');
+
+
 		$('.content').hide();
 		$('#start').fadeIn(300);
 		$('#start form').off('submit')
