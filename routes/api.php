@@ -20,7 +20,7 @@ Route::prefix('v1')->group(function(){
     Route::group(['middleware' => 'auth:api'], function(){
         Route::post('getUser', 'Api\AuthController@getUser');
 
-        Route::get('list', 'Api\GameController@list');
+        Route::get('resume', 'Api\GameController@resume');
         Route::post('new', 'Api\GameController@new');
         Route::post('start', 'Api\GameController@start');
         Route::post('pick', 'Api\GameController@pick');

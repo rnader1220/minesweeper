@@ -13,10 +13,18 @@ class GameController extends Controller
 {
     function new(Request $request) {
         $input = $request->all();
-        $new_game = Helper::createNewGame($input);
+        $new_game = Helper::CreateNewGame($input);
 
-        unset($new_game['minemap']);
         return $new_game;
+    }
+
+    function resume(Request $request) {
+        $input = $request->all();
+        $game = Helper::resumeGame($input);
+        if(!$game) {
+            return false;
+        }
+        return $game;
     }
 
     function pick(Request $request) {

@@ -70,25 +70,29 @@ var minesweeper = (function($, undefined) {
 			// show register
 		} else {
 			$('#menu-start').on('click', start).show();
-			$('#menu-history').on('click', list).show();
 			$('#menu-logout').on('click', logout).show();
+			resume();
 		}
 
 	}
-	var list = function() {
+
+	var resume = function() {
 		$.ajax({
 			type: "GET",
-			url: '/api/v1/list',
+			url: '/api/v1/resume',
 			headers: {
 				Accept: 'application/json',
 				Authorization: 'Bearer '+user_token,
 			},
 		})
 		.done(function (resp) {
-			drawList(resp);
-			setTimeout(function () {
-				$('#list').fadeIn(300);
-			}, 300);
+			if(resp != 'false') {
+				renderBoard(resp);
+				setTimeout(function () {
+					$('#game').fadeIn(300);
+				}, 300);
+
+			}
 		})
 		.fail(function (message) {
 			alert(JSON.stringify(message));

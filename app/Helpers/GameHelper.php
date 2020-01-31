@@ -7,7 +7,14 @@ use Illuminate\Http\Request;
 class GameHelper 
 {
 
-    static function createNewGame($input) {
+    static function CreateNewGame($input) {
+        $game = Game::where('user_id', Auth::user()->id)->first();
+        if(!is_null($game)) {
+            $game['status'] = -1;
+            $game->save();
+        }
+        unset($game);
+
         $new_game = new Game();
         switch($input['size']) {
             case 10:
@@ -44,6 +51,17 @@ class GameHelper
         unset($new_game['minemap']);
         return $new_game;
     }
+
+    static function ResumeGame($input) {
+        $game = Game::where('user_id', Auth::user()->id)->first();
+        if(is_null($game)) {
+            return false;
+        } else {
+            unset($game['minemap']);
+            return $game;
+        }
+    }
+
 
     static function PickSpot($input) {
         $row = intval($input['row']);
