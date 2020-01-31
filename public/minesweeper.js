@@ -186,10 +186,11 @@ var minesweeper = (function($, undefined) {
 				break;
 				case -1:
 					$(cell).html('&#10040;');
-					$(cell).css('background-color', '#d0d0ff');
+					$(cell).css('background-color', '#ffd0d0');
 					break;
 				case -2:
 					$(cell).html('&#10042;');
+					$(cell).css('background-color', '#ffd0d0');
 				break;
 				case 0:
 					$(cell).html(' ');
@@ -206,11 +207,13 @@ var minesweeper = (function($, undefined) {
 			}
 
 		}
-		if(gameMap.status == -1) {
-			alert('game over!');
+		if(gameMap.status != 0) {
+			if(gameMap.status == 1)
+				alert('You emerge victorious.');
+			else
+				alert('Darkness falls over you.');
 			$('#game_table').find('tbody').off('click');
 			$('#game_table').find('tbody').off('contextmenu');
-	
 		}
 
 	}

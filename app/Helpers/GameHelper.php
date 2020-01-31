@@ -41,6 +41,7 @@ class GameHelper
         $new_game['clickmap'] = json_encode([]);
 
         $new_game->save();
+        unset($new_game['minemap']);
         return $new_game;
     }
 
@@ -55,11 +56,18 @@ class GameHelper
         if(in_array($pickloc, $minemap)) {
             $result = -1;
             $game['status'] = -1;
-            $pick = ['row' => $row, 'col' => $col, 'value' => -1];
             $clickmap[] = ['row' => $row, 'col' => $col, 'value' => -1];
+            self::ShowMines($clickmap, $minemap);
         } else {
             self::CheckSpot($clickmap, $minemap, $row, $col, $game['rows'], $game['cols']);
         }
+
+        $clickmap = array_unique($clickmap, SORT_REGULAR);
+        $clickmap = array_values($clickmap);
+
+        if(self::WinState($game['rows'], $game['cols'],  $game['mines'], $clickmap))
+            $game['status'] = 1;
+
         $game['clickmap'] = json_encode($clickmap);
         $game->save();      
         unset($game['minemap']);
@@ -112,10 +120,41 @@ class GameHelper
         } else {
             $clickmap[] = $pick;
         }
+
+        $clickmap = array_unique($clickmap, SORT_REGULAR);
+        $clickmap = array_values($clickmap);
+
+        if(self::WinState($game['rows'], $game['cols'],  $game['mines'], $clickmap))
+            $game['status'] = 1;
+
         $game['clickmap'] = json_encode($clickmap);
         $game->save();      
+
+        unset($game['minemap']);
         return $game;
 
+    }
+
+    static function WinState($rows, $cols, $mines, $clickmap) {
+        // win state:
+        // number of flags + number of uncovered cells == number of mines
+        $counter = 0; 
+        foreach($clickmap as $click) {
+            if ($click['value'] > -1) $counter++;
+        }
+        $maxclicks = ($rows * $cols) - $mines;
+        return $counter == $maxclicks;
+    }
+
+    static function ShowMines(&$clickmap, $minemap) {
+        foreach($minemap as $mine) {
+            $check = ['row' => $mine[0], 'col' => $mine[1], 'value' => -1];
+            if(!in_array($check, $clickmap)) {
+                $check['value'] = -2;
+                $clickmap[] = $check;
+            }
+    
+        }
     }
 
     // value = char [' ', '1', '2', '3', '4', '5', '6', '7', '8', '&#9873;', '&#10040;' , '&#10042;'), 
