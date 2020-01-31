@@ -48,30 +48,57 @@ class GameHelper
         $row = intval($input['row']);
         $col = intval($input['col']);
         $game = Game::find($input['game_id']);
-        $minemap = json_decode($game['minemap'], true);
-
         $clickmap = json_decode($game['clickmap'], true);
+        $minemap = json_decode($game['minemap'], true);
         $pickloc = [$row, $col];
-        $pick = ['row' => $row, 'col' => $col, 'value' => 0];
-        $result = 0;
+
         if(in_array($pickloc, $minemap)) {
             $result = -1;
             $game['status'] = -1;
+            $pick = ['row' => $row, 'col' => $col, 'value' => -1];
+            $clickmap[] = ['row' => $row, 'col' => $col, 'value' => -1];
         } else {
-            for($peek_row = $row-1; $peek_row <= $row+1; $peek_row++) {
-                for($peek_col = $col-1; $peek_col <= $col+1; $peek_col++) {
-                    if(in_array([$peek_row, $peek_col], $minemap)) $result++;
-                }
-            }
+            self::CheckSpot($clickmap, $minemap, $row, $col, $game['rows'], $game['cols']);
         }
-        $pick['value'] = $result;
-        $clickmap[] = $pick;
         $game['clickmap'] = json_encode($clickmap);
         $game->save();      
+        unset($game['minemap']);
         return $game;
 
     }
 
+    static function CheckSpot(&$clickmap, $minemap, $row, $col, $maxrow, $maxcol) {
+        if($row < 0 || $col < 0 || $row >= $maxrow || $col >= $maxcol) return;
+
+        $pick = ['row' => $row, 'col' => $col, 'value' => 0];
+        if(in_array($pick, $clickmap)) {
+            return;
+        }
+
+        $result = 0;
+
+        for($peek_row = $row-1; $peek_row <= $row+1; $peek_row++) {
+            for($peek_col = $col-1; $peek_col <= $col+1; $peek_col++) {
+                if($row >= 0 && $col >= 0 && $row < $maxrow || $col < $maxcol) {
+                    if(in_array([$peek_row, $peek_col], $minemap)) $result++;
+                }
+            }
+        }
+        
+        $pick['value'] = $result;
+
+        $clickmap[] = $pick;
+
+        if($result == 0) {
+            for($alt_row = $row-1; $alt_row <= $row+1; $alt_row++) {
+                for($alt_col = $col-1; $alt_col <= $col+1; $alt_col++) {
+                    self::CheckSpot($clickmap, $minemap, $alt_row, $alt_col, $maxrow, $maxcol);
+                }
+            }
+        }
+
+        return;
+    }
 
     static function FlagSpot($input) {
         $row = intval($input['row']);
@@ -92,10 +119,5 @@ class GameHelper
     }
 
     // value = char [' ', '1', '2', '3', '4', '5', '6', '7', '8', '&#9873;', '&#10040;' , '&#10042;'), 
-    private static function CheckSpot($row, $col) {
-        // check if coords are already in click map
-        // if it is, return null;
-    }
-
 
 }
