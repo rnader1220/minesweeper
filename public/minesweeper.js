@@ -169,8 +169,8 @@ var minesweeper = (function($, undefined) {
 
 			}
 		}
-		$('#game_table').find('tbody').on('click', 'td', function() {pick(this);} );
-		$('#game_table').find('tbody').on('contextmenu', 'td', function(e) {e.preventDefault();flag(this);} );
+		$('#game_table').find('tbody').on('click', 'td', function() {pick(this, true);} );
+		$('#game_table').find('tbody').on('contextmenu', 'td', function(e) {e.preventDefault();pick(this, false);} );
 		$('#game').show();
 		
 	}
@@ -180,26 +180,30 @@ var minesweeper = (function($, undefined) {
 		for (t=0; t < clickmap.length; t++) {
 			element = clickmap[t];
 			cell = findCell(element.row * gameMap.rows + element.col);
-			$(cell).css('background-color', '#d0d0ff');
 			switch(element.value) {
 				case -3:
 					$(cell).html('&#9873;');
 				break;
 				case -1:
 					$(cell).html('&#10040;');
-				break;
+					$(cell).css('background-color', '#d0d0ff');
+					break;
 				case -2:
 					$(cell).html('&#10042;');
 				break;
 				case 0:
 					$(cell).html(' ');
+					$(cell).css('background-color', '#d0d0ff');
 					break;
 				default:
 					$(cell).html(element.value);
-				break;
+					$(cell).css('background-color', '#d0d0ff');
+					break;
 
 			}
-			$(cell).addClass('disabled');
+			if(element.value != -3) {
+				$(cell).addClass('disabled');
+			}
 
 		}
 		if(gameMap.status == -1) {
@@ -213,18 +217,11 @@ var minesweeper = (function($, undefined) {
 
 	var findCell = function(index) {
 		var cell = $("#game_table").find("[index]").eq(index);
-		$(cell).css('background-color', 'red');
 		return cell;
 	}
 
-	var flag = function(cell) {
-		alert('flag ' + $(cell).attr('row') + ':' + $(cell).attr('col'));
-		// ajax call
-		// on success
-		// renderGame(resp);
-	}
 
-	var pick = function(cell) {
+	var pick = function(cell, ispick) {
 		if($(cell).hasClass('disabled')) return false;
 		//if ($(cell).css('background-color') != 'silver') return false;
 		var data = {
@@ -232,10 +229,15 @@ var minesweeper = (function($, undefined) {
 			'col': parseInt($(cell).attr('col')),
 			'game_id': curr_game
 		};
-
+		if(ispick) {
+			var url = '/api/v1/pick'
+		} else {
+			$(cell).html(' ');
+			var url = '/api/v1/flag'
+		}
 		$.ajax({
 			type: "POST",
-			url: '/api/v1/pick',
+			url: url,
 			data: data,
 			headers: {
 				Accept: 'application/json',

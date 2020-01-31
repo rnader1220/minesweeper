@@ -72,6 +72,25 @@ class GameHelper
 
     }
 
+
+    static function FlagSpot($input) {
+        $row = intval($input['row']);
+        $col = intval($input['col']);
+        $game = Game::find($input['game_id']);
+        $clickmap = json_decode($game['clickmap'], true);
+        $pick = ['row' => $row, 'col' => $col, 'value' => -3];
+        if(in_array($pick, $clickmap)) {
+            $index = array_search($pick, $clickmap);
+            array_splice($clickmap, $index, 1);
+        } else {
+            $clickmap[] = $pick;
+        }
+        $game['clickmap'] = json_encode($clickmap);
+        $game->save();      
+        return $game;
+
+    }
+
     // value = char [' ', '1', '2', '3', '4', '5', '6', '7', '8', '&#9873;', '&#10040;' , '&#10042;'), 
     private static function CheckSpot($row, $col) {
         // check if coords are already in click map

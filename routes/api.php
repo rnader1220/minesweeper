@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function(){
         Route::post('new', 'Api\GameController@new');
         Route::post('start', 'Api\GameController@start');
         Route::post('pick', 'Api\GameController@pick');
+        Route::post('flag', 'Api\GameController@flag');
 
         // pick
         // flag

@@ -22,8 +22,13 @@ class GameController extends Controller
     function pick(Request $request) {
         $input = $request->all();
         $game = Helper::PickSpot($input);
+        return $game;
 
-   
+    }
+
+    function flag(Request $request) {
+        $input = $request->all();
+        $game = Helper::FlagSpot($input);
         return $game;
 
     }
