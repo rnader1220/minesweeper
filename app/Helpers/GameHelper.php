@@ -8,7 +8,7 @@ class GameHelper
 {
 
     static function CreateNewGame($input) {
-        $game = Game::where('user_id', Auth::user()->id)->where('status', 0)->last();
+        $game = Game::where('user_id', Auth::user()->id)->where('status', 0)->orderBy('id', 'desc')->first();
         if(!is_null($game)) {
             $game['status'] = -1;
             $game->save();
@@ -53,7 +53,7 @@ class GameHelper
     }
 
     static function ResumeGame($input) {
-        $game = Game::where('user_id', Auth::user()->id)->where('status', 0)->last();
+        $game = Game::where('user_id', Auth::user()->id)->where('status', 0)->orderBy('id', 'desc')->first();
         if(is_null($game)) {
             return false;
         } else {
