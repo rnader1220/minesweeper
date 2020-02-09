@@ -115,6 +115,7 @@ var minesweeper = (function($, undefined) {
 		$('#start form').off('submit')
 			.on('submit', function (e) {
 			e.preventDefault();
+			curr_game = null;
 			if ($(this).valid()) $.ajax({
 				type: "POST",
 				url: '/api/v1/new',

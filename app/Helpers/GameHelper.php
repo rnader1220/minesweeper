@@ -46,6 +46,7 @@ class GameHelper
         $new_game['user_id'] = Auth::user()->id;
         $new_game['minemap'] = json_encode($minemap);
         $new_game['clickmap'] = json_encode([]);
+        $new_game['status'] = 0;
 
         $new_game->save();
         unset($new_game['minemap']);
