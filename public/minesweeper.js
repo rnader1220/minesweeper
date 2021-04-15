@@ -3,7 +3,7 @@ var minesweeper = (function($, undefined) {
 	var user_token = null;
 	var curr_game = null;
 
-	var initialize = function() {		
+	var initialize = function() {
 		$('.content').hide();
 		user_token = null;
 		setSessionState();
@@ -88,9 +88,6 @@ var minesweeper = (function($, undefined) {
 		.done(function (resp) {
 			if(resp != 'false') {
 				renderBoard(resp);
-				setTimeout(function () {
-					$('#game').fadeIn(300);
-				}, 300);
 
 			}
 		})
@@ -106,12 +103,11 @@ var minesweeper = (function($, undefined) {
 
 
 	var start = function() {
-		if(curr_game != null)
-			alert('Clearer waters elsewhere perhaps?');
-
-
-		$('.content').hide();
-		$('#start').fadeIn(300);
+        $('#game').slideUp(300);
+        $('#result').fadeOut(300);
+        setTimeout(function () {
+            $('#start').slideDown(300);
+        }, 600);
 		$('#start form').off('submit')
 			.on('submit', function (e) {
 			e.preventDefault();
@@ -124,24 +120,21 @@ var minesweeper = (function($, undefined) {
 					Accept: 'application/json',
 					Authorization: 'Bearer '+user_token,
 				},
-	
+
 			})
 				.done(function (resp) {
-					$('#start').fadeOut(300);
+					$('#start').slideUp(300);
 					renderBoard(resp);
-					setTimeout(function () {
-						$('#game').fadeIn(300);
-					}, 300);
-
 				})
 				.fail(function (message) {
 					alert(JSON.stringify(message));
 				});
-		}).validate();		
+		}).validate();
 
 	}
 
 	var renderBoard = function(gameMap) {
+
 		$('#game_table').find('tbody').off('click', 'td');
 		$('#game_table').find('tbody').off('contextmenu', 'td');
 		// clear table
@@ -161,9 +154,15 @@ var minesweeper = (function($, undefined) {
 		}
 		$('#game_table').find('tbody').on('click', 'td', function() {pick(this, true);} );
 		$('#game_table').find('tbody').on('contextmenu', 'td', function(e) {e.preventDefault();pick(this, false);} );
-		$('#game').show();
 		renderGame(gameMap);
-		
+        $('#game').slideDown(900);
+        setTimeout(function () {
+            $('#result').html('Clear the way to victory!').fadeIn(300);
+        }, 900);
+
+        setTimeout(function () {
+            $('#result').fadeOut(900);
+        }, 1800);
 	}
 
 	var renderGame = function(gameMap) {
@@ -174,40 +173,79 @@ var minesweeper = (function($, undefined) {
 			switch(element.value) {
 				case -3:
 					$(cell).html('&#9873;');
+                    $(cell).css('color', 'red');
 				break;
 				case -1:
 					$(cell).html('&#10040;');
 					$(cell).css('background-color', '#ffd0d0');
+                    $(cell).css('color', 'red');
 					break;
 				case -2:
 					$(cell).html('&#10042;');
 					$(cell).css('background-color', '#ffd0d0');
+                    $(cell).css('color', 'red');
 				break;
 				case 0:
 					$(cell).html(' ');
 					$(cell).css('background-color', '#d0d0ff');
 					break;
-				default:
-					$(cell).html(element.value);
+                case 1:
+                case 2:
+                case 3:
+                    $(cell).html(element.value);
+                    $(cell).css('background-color', '#d0d0ff');
+                    $(cell).css('color', 'blue');
+                    break;
+                default:
+                    $(cell).html(element.value);
 					$(cell).css('background-color', '#d0d0ff');
 					break;
 
 			}
-			if(element.value != -3) {
+
+			switch(element.value) {
+                case 1:
+                    $(cell).css('color', 'blue');
+                    break;
+                case 2:
+                    $(cell).css('color', 'orange');
+                    break;
+                case 3:
+                    $(cell).css('color', 'green');
+                    break;
+                case 4:
+                    $(cell).css('color', 'red');
+                    break;
+                case 5:
+                    $(cell).css('color', 'purple');
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                    $(cell).css('color', 'black');
+                    break;
+			}
+            if(element.value != -3) {
 				$(cell).addClass('disabled');
 			}
 
 		}
 		if(gameMap.status != 0) {
-			if(gameMap.status == 1)
-				alert('You emerge victorious.');
-			else
-				alert('Darkness falls over you.');
+            if(gameMap.status == 1) {
+				$('#result').html('You emerge victorious.').fadeIn(900);
+            } else {
+                $('#result').html('Darkness befalls you.').fadeIn(900);
+            }
 			$('#game_table').find('tbody').off('click');
 			$('#game_table').find('tbody').off('contextmenu');
 		}
 
 	}
+
+    var styleValue = function(value) {
+        value = "<span color='blue'>"+value+"</span>";
+        return value;
+    }
 
 	var findCell = function(index) {
 		var cell = $("#game_table").find("[index]").eq(index);

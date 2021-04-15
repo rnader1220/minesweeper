@@ -42,6 +42,14 @@ html, body {
     font-size: 84px;
 }
 
+#result, h4 {
+    padding-top:12px;
+    text-align: center;
+    color: #400000;
+    font-family: 'Permanent Marker', sans-serif;
+    font-size: 24px;
+}
+
 .menu-main {
     height:64px;
     text-align:right;
@@ -66,6 +74,7 @@ html, body {
 }
 #game table {
     text-align: center;
+    font-family: 'Exo 2', sans-serif;
 }
 
 #game table tbody tr {
@@ -74,6 +83,12 @@ html, body {
 
 #game table  tbody tr td {
     width:30px;
-    border: solid 1px gray;
+    border: collapse;
+}
+
+#game table  tbody tr td {
     background-color: silver;
+}
+#game table  tbody tr td:hover {
+    background-color: gray;
 }
