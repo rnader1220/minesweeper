@@ -108,14 +108,13 @@ var minesweeper = (function($, undefined) {
         setTimeout(function () {
             $('#start').slideDown(300);
         }, 600);
-		$('#start form').off('submit')
-			.on('submit', function (e) {
+        $('#start form input').off('click').on('click', function (e) {
 			e.preventDefault();
 			curr_game = null;
 			if ($(this).valid()) $.ajax({
 				type: "POST",
 				url: '/api/v1/new',
-				data: $(this).serialize(),
+				data: $('#start form').serialize(),
 				headers: {
 					Accept: 'application/json',
 					Authorization: 'Bearer '+user_token,
@@ -130,7 +129,6 @@ var minesweeper = (function($, undefined) {
 					alert(JSON.stringify(message));
 				});
 		}).validate();
-
 	}
 
 	var renderBoard = function(gameMap) {
